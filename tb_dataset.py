@@ -2,6 +2,8 @@ import json
 import cv2
 import numpy as np
 
+import random
+from torch.utils.data import Sampler
 from torch.utils.data import Dataset
 from distortions import random_distortion
 
@@ -49,4 +51,19 @@ class TB_Dataset(Dataset):
         target = (target.astype(np.float32) / 127.5) - 1.0
 
         return dict(jpg=target, txt=prompt, hint=source)
+
+
+
+class TB_Sampler(Sampler):
+    def __init__(self, dataset, subset_size):
+        self.dataset = dataset
+        self.subset_size = subset_size
+
+    def __iter__(self):
+        indices = list(range(len(self.dataset)))
+        subset_indices = random.sample(indices, self.subset_size)
+        return iter(subset_indices)
+
+    def __len__(self):
+        return self.subset_size
 
