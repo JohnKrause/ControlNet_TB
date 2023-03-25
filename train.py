@@ -10,15 +10,15 @@ from config import *
 
 
 # Configs
-revision = CONFIG_REVNUM
+revision = REVNUM
 model_config = f"./training/{revision}/cldm_v21_v1.yaml"
-start_model = f"./training/{revision}/models/{CONFIG_MODEL}"
+start_model = f"./training/{revision}/models/{MODEL}"
 batch_size = 4
 logger_freq = 300
 learning_rate = 1e-5
 prompt_chance = 0.7
 control_chance = 0.8
-control_type = CONFIG_CONTROL_TYPE
+control_type = CONTROL_TYPE
 sd_locked = True
 only_mid_control = False
 

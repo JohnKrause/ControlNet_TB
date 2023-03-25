@@ -3,6 +3,7 @@ import cv2
 import numpy as np
 
 from torch.utils.data import Dataset
+from distortions import random_distortion
 
 
 class TB_Dataset(Dataset):
@@ -23,8 +24,8 @@ class TB_Dataset(Dataset):
     def __getitem__(self, idx):
         item = self.train_db[idx]
 
-        source_filename = item['source']
-        target_filename = item['target']
+        source_filename = item['source'] #the control input
+        target_filename = item['target'] #the real image
         prompt = item['prompt']
 
         source = cv2.imread(self.revision_folder + f"{self.control_type}/"+source_filename)
@@ -33,6 +34,13 @@ class TB_Dataset(Dataset):
         # Do not forget that OpenCV read images in BGR order.
         source = cv2.cvtColor(source, cv2.COLOR_BGR2RGB)
         target = cv2.cvtColor(target, cv2.COLOR_BGR2RGB)
+
+        if (random.uniform(0.0, 1.0) > self.prompt_chance): 
+            prompt = " " #delete the prompt
+        elif (random.uniform(0.0, 1.0) > self.control_chance):
+            source = source * 0.0 #delete the control
+
+        source = random_distortion(source)
 
         # Normalize source images to [0, 1].
         source = source.astype(np.float32) / 255.0
