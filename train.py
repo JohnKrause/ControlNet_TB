@@ -6,17 +6,19 @@ from tb_dataset import TB_Dataset
 from cldm.logger import ImageLogger
 from cldm.model import create_model, load_state_dict
 
+from config import *
+
 
 # Configs
-revision = 'r1'
+revision = CONFIG_REVNUM
 model_config = f"./training/{revision}/cldm_v21_v1.yaml"
-start_model = f"./training/{revision}/models/sd21_control_v1.ckpt"
+start_model = f"./training/{revision}/models/{CONFIG_MODEL}"
 batch_size = 4
 logger_freq = 300
 learning_rate = 1e-5
 prompt_chance = 0.7
 control_chance = 0.8
-control_type = 'sketch'
+control_type = CONFIG_CONTROL_TYPE
 sd_locked = True
 only_mid_control = False
 

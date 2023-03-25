@@ -1,6 +1,5 @@
 .idea/
 
-training/
 lightning_logs/
 image_log/
 
@@ -19,6 +18,9 @@ __pycache__/
 
 # C extensions
 *.so
+
+# secrets
+*.secret
 
 # Distribution / packaging
 .Python
