@@ -843,8 +843,11 @@ class LatentDiffusion(DDPM):
         return self.first_stage_model.encode(x)
 
     def shared_step(self, batch, **kwargs):
+        print("ld shared step")
         x, c = self.get_input(batch, self.first_stage_key)
+        print(f"ld got input: {x}, {c}")
         loss = self(x, c)
+        print(f"got loss:{loss}")
         return loss
 
     def forward(self, x, c, *args, **kwargs):
