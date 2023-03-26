@@ -916,12 +916,14 @@ class LatentDiffusion(DDPM):
     def p_losses(self, x_start, cond, t, noise=None):
         print("enter p_losses")
         noise = default(noise, lambda: torch.randn_like(x_start))
+        print("to q sample")
         x_noisy = self.q_sample(x_start=x_start, t=t, noise=noise)
+        print("to apply sample")
         model_output = self.apply_model(x_noisy, t, cond)
 
         loss_dict = {}
         prefix = 'train' if self.training else 'val'
-
+        print("to parameterization sample")
         if self.parameterization == "x0":
             target = x_start
         elif self.parameterization == "eps":
@@ -931,7 +933,7 @@ class LatentDiffusion(DDPM):
             target = self.get_v(x_start, noise, t)
         else:
             raise NotImplementedError()
-
+        print("to get_loss")
         loss_simple = self.get_loss(model_output, target, mean=False).mean([1, 2, 3])
         loss_dict.update({f'{prefix}/loss_simple': loss_simple.mean()})
 
