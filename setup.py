@@ -28,6 +28,8 @@ def download_from_s3():
     download_bucket_file(IMAGES_TARGET, IMAGES_TARGET_LOCAL, bucket)
     download_bucket_file(CONTROLS_TARGET, CONTROLS_TARGET_LOCAL, bucket)
 
+    #download manifest of images.
+
     #extract things using multiprocessing
     print(f"Extracting {IMAGES_TARGET}...")
     tar_extract(IMAGES_TARGET_LOCAL,IMAGES_EXTRACT)
