@@ -24,7 +24,7 @@ control_type = CONTROL_TYPE
 sd_locked = True
 only_mid_control = False
 
-
+torch.set_float32_matmul_precision('medium')
 # First use cpu to load models. Pytorch Lightning will automatically move it to GPUs.
 model = create_model(model_config).cpu()
 model.load_state_dict(load_state_dict(start_model, location='cpu'))
@@ -41,7 +41,7 @@ dataset = TB_Dataset(control_type,
 sampler = TB_Sampler(dataset, epoch_size)
 dataloader = DataLoader(dataset, num_workers=3, batch_size=batch_size, sampler=sampler)
 logger = ImageLogger(batch_frequency=logger_freq)
-trainer = pl.Trainer(gpus=1, precision=32, callbacks=[logger], accumulate_grad_batches=3, max_epochs=max_epochs)
+trainer = pl.Trainer(gpus=1, callbacks=[logger], accumulate_grad_batches=3, max_epochs=max_epochs)
 
 # Train!
 trainer.fit(model, dataloader)
