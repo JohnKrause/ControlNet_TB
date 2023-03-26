@@ -442,14 +442,14 @@ class DDPM(pl.LightningModule):
         loss, loss_dict = self.shared_step(batch)
 
         self.log_dict(loss_dict, prog_bar=True,
-                      logger=True, on_step=True, on_epoch=True)
+                      logger=True, on_step=True, on_epoch=True, batch_size=len(batch[0]))
 
         self.log("global_step", float(self.global_step),
-                 prog_bar=True, logger=True, on_step=True, on_epoch=False, batch_size=batch.size(0))
+                 prog_bar=True, logger=True, on_step=True, on_epoch=False)
 
         if self.use_scheduler:
             lr = self.optimizers().param_groups[0]['lr']
-            self.log('lr_abs', lr, prog_bar=True, logger=True, on_step=True, on_epoch=False, batch_size=batch.size(0))
+            self.log('lr_abs', lr, prog_bar=True, logger=True, on_step=True, on_epoch=False)
 
         return loss
 
