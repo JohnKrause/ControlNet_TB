@@ -438,13 +438,11 @@ class DDPM(pl.LightningModule):
             for i in range(len(batch[k])):
                 if self.ucg_prng.choice(2, p=[1 - p, p]):
                     batch[k][i] = val
-
         loss, loss_dict = self.shared_step(batch)
-
         self.log_dict(loss_dict, prog_bar=True,
-                      logger=True, on_step=True, on_epoch=True)
+                      logger=True, on_step=True, on_epoch=True, batch_size=len(batch))
 
-        self.log("global_step", self.global_step,
+        self.log("global_step", float(self.global_step),
                  prog_bar=True, logger=True, on_step=True, on_epoch=False)
 
         if self.use_scheduler:
@@ -588,7 +586,7 @@ class LatentDiffusion(DDPM):
 
     @rank_zero_only
     @torch.no_grad()
-    def on_train_batch_start(self, batch, batch_idx, dataloader_idx):
+    def on_train_batch_start(self, batch, batch_idx):
         # only for very first batch
         if self.scale_by_std and self.current_epoch == 0 and self.global_step == 0 and batch_idx == 0 and not self.restarted_from_ckpt:
             assert self.scale_factor == 1., 'rather not use custom rescaling and std-rescaling simultaneously'
@@ -836,6 +834,11 @@ class LatentDiffusion(DDPM):
         loss = self(x, c)
         return loss
 
+    def check_tensor_validity(self, tensor):
+        is_valid = not (torch.isnan(tensor).any() or torch.isinf(tensor).any())
+        print(f'Tensor is valid: {is_valid}')
+        return is_valid
+
     def forward(self, x, c, *args, **kwargs):
         t = torch.randint(0, self.num_timesteps, (x.shape[0],), device=self.device).long()
         if self.model.conditioning_key is not None:
@@ -856,7 +859,6 @@ class LatentDiffusion(DDPM):
                 cond = [cond]
             key = 'c_concat' if self.model.conditioning_key == 'concat' else 'c_crossattn'
             cond = {key: cond}
-
         x_recon = self.model(x_noisy, t, **cond)
 
         if isinstance(x_recon, tuple) and not return_ids:
@@ -889,7 +891,6 @@ class LatentDiffusion(DDPM):
 
         loss_dict = {}
         prefix = 'train' if self.training else 'val'
-
         if self.parameterization == "x0":
             target = x_start
         elif self.parameterization == "eps":
@@ -898,7 +899,6 @@ class LatentDiffusion(DDPM):
             target = self.get_v(x_start, noise, t)
         else:
             raise NotImplementedError()
-
         loss_simple = self.get_loss(model_output, target, mean=False).mean([1, 2, 3])
         loss_dict.update({f'{prefix}/loss_simple': loss_simple.mean()})
 

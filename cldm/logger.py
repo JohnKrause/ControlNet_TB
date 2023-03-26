@@ -6,6 +6,10 @@ import torchvision
 from PIL import Image
 from pytorch_lightning.callbacks import Callback
 from pytorch_lightning.utilities.distributed import rank_zero_only
+import json
+import boto3
+from io import BytesIO
+from config import *
 
 
 class ImageLogger(Callback):
@@ -26,7 +30,12 @@ class ImageLogger(Callback):
 
     @rank_zero_only
     def log_local(self, save_dir, split, images, global_step, current_epoch, batch_idx):
-        root = os.path.join(save_dir, "image_log", split)
+        with open('secrets.secret') as f:
+            secrets = json.load(f)    
+        # Connect to the S3 bucket using the authentication details
+        s3 = boto3.resource('s3', aws_access_key_id=secrets['aws_access_key'], aws_secret_access_key=secrets['aws_secret_key'])
+        bucket = s3.Bucket(secrets['aws_bucket_name'])
+
         for k in images:
             grid = torchvision.utils.make_grid(images[k], nrow=4)
             if self.rescale:
@@ -35,9 +44,14 @@ class ImageLogger(Callback):
             grid = grid.numpy()
             grid = (grid * 255).astype(np.uint8)
             filename = "{}_gs-{:06}_e-{:06}_b-{:06}.png".format(k, global_step, current_epoch, batch_idx)
-            path = os.path.join(root, filename)
-            os.makedirs(os.path.split(path)[0], exist_ok=True)
-            Image.fromarray(grid).save(path)
+
+            # Save the image to an in-memory buffer
+            buffer = BytesIO()
+            Image.fromarray(grid).save(buffer, format='PNG')
+            buffer.seek(0)
+
+            # Upload the image to the S3 bucket
+            bucket.put_object(Key=LOG_IMG_PATH+filename, Body=buffer.getvalue())
 
     def log_img(self, pl_module, batch, batch_idx, split="train"):
         check_idx = batch_idx  # if self.log_on_batch_idx else pl_module.global_step
@@ -71,6 +85,6 @@ class ImageLogger(Callback):
     def check_frequency(self, check_idx):
         return check_idx % self.batch_freq == 0
 
-    def on_train_batch_end(self, trainer, pl_module, outputs, batch, batch_idx, dataloader_idx):
+    def on_train_batch_end(self, trainer, pl_module, outputs, batch, batch_idx):
         if not self.disabled:
             self.log_img(pl_module, batch, batch_idx, split="train")

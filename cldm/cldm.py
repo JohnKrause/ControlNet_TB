@@ -286,7 +286,6 @@ class ControlNet(nn.Module):
         emb = self.time_embed(t_emb)
 
         guided_hint = self.input_hint_block(hint, emb, context)
-
         outs = []
 
         h = x.type(self.dtype)
@@ -420,7 +419,8 @@ class ControlLDM(LatentDiffusion):
             params += list(self.model.diffusion_model.output_blocks.parameters())
             params += list(self.model.diffusion_model.out.parameters())
         opt = torch.optim.AdamW(params, lr=lr)
-        return opt
+        sched=torch.optim.lr_scheduler.StepLR(opt,1,gamma=0.5)
+        return  {'optimizer': opt, 'lr_scheduler': sched}
 
     def low_vram_shift(self, is_diffusing):
         if is_diffusing:
