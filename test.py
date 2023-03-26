@@ -58,3 +58,7 @@ def test():
     print("Test with initialized model...")
     test_sample(sampler)
 
+if __name__ == "__main__":
+    print("testing sampler...")
+    test()
+
