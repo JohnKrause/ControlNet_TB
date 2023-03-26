@@ -17,6 +17,7 @@ def test_sample(model,ddim_sampler):
         num_samples=1
         ddim_steps=40
         seed=-1
+        strength=1.0
         img = np.random.randint(0, 256, size=(768, 768, 3), dtype=np.uint8)
         H, W, C = img.shape
         guess_mode=False
