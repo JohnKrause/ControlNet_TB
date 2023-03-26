@@ -425,8 +425,12 @@ class DDPM(pl.LightningModule):
         return x
 
     def shared_step(self, batch):
+        print("shared step begin..")
         x = self.get_input(batch, self.first_stage_key)
+        print("got input, run forward pass")
+        print(f"batch:{batch}")
         loss, loss_dict = self(x)
+        print(f"got losses: {loss}, {loss_dict}")
         return loss, loss_dict
 
     def training_step(self, batch, batch_idx):
