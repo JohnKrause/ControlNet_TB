@@ -440,9 +440,9 @@ class DDPM(pl.LightningModule):
                     batch[k][i] = val
 
         loss, loss_dict = self.shared_step(batch)
-
+        
         self.log_dict(loss_dict, prog_bar=True,
-                      logger=True, on_step=True, on_epoch=True, batch_size=len(batch[0]))
+                      logger=True, on_step=True, on_epoch=True, batch_size=len(batch))
 
         self.log("global_step", float(self.global_step),
                  prog_bar=True, logger=True, on_step=True, on_epoch=False)
