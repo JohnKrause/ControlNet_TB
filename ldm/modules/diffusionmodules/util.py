@@ -165,7 +165,7 @@ def timestep_embedding(timesteps, dim, max_period=10000, repeat_only=False):
         a=-math.log(max_period)
         b=torch.arange(start=0, end=half, dtype=torch.float32)
         c=a*b/half
-        print(f"a:{a.device},{a.type()}, b:{b.device},{b.type()}, c:{c.device},{c.type()}")
+        print(f"a:{type(a)}, b:{b.device},{b.type()}, c:{c.device},{c.type()}")
         #freqs = torch.empty_like(c, device=timesteps.device)
         #for i in range(c.size(0)):
         #    freqs[i] = torch.exp(c[i])
