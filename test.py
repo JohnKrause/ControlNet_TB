@@ -10,7 +10,7 @@ from cldm.ddim_hacked import DDIMSampler
 from config import *
 
 
-def test_sample(ddim_sampler):
+def test_sample(model,ddim_sampler):
     with torch.no_grad():
         prompt="a cat in a rowboat"
         n_prompt="dog"
@@ -52,11 +52,11 @@ def test():
     #instantiate the sampler with the gpu-located model
     sampler = DDIMSampler(model)
     print("Test uninitialized model sample...")
-    test_sample(sampler)
+    test_sample(model,sampler)
     print("loading model...")
     m,u=model.load_state_dict(load_state_dict(MODEL_LOCAL, location=model.device), strict=False)
     print("Test with initialized model...")
-    test_sample(sampler)
+    test_sample(model,sampler)
 
 if __name__ == "__main__":
     print("testing sampler...")
