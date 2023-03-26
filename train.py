@@ -27,7 +27,7 @@ sd_locked = True
 only_mid_control = False
 
 set_float32_matmul_precision('medium')
-set_detect_anomaly(True)
+
 # First use cpu to load models. Pytorch Lightning will automatically move it to GPUs.
 model = create_model(model_config).cpu()
 model.load_state_dict(load_state_dict(start_model, location='cpu'))
