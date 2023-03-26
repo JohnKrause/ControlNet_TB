@@ -845,7 +845,7 @@ class LatentDiffusion(DDPM):
     def shared_step(self, batch, **kwargs):
         print("ld shared step")
         x, c = self.get_input(batch, self.first_stage_key)
-        print(f"ld got input: {x}, {c}")
+        print(f"ld got input x and c")
         print(f"checking validity of x")
         self.check_tensor_validity(x)
         print(f"checking validity of c")
