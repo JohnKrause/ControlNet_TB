@@ -160,34 +160,22 @@ def timestep_embedding(timesteps, dim, max_period=10000, repeat_only=False):
     :param max_period: controls the minimum frequency of the embeddings.
     :return: an [N x dim] Tensor of positional embeddings.
     """
-    print("into timestep embedding")
     if not repeat_only:
         half = dim // 2
-        print(f"create freqs, half={half}")
         a=-math.log(max_period)
         b=torch.arange(start=0, end=half, dtype=torch.float32)
-        print(f"a:{a}")
-        print(f"b:{b}, {b.device}")
         c=a*b/half
-        print(f"c:{c}, {c.device}")
-        c.to(device=timesteps.device)
-        print(f"move c: {c.device}")
-        
         #freqs = torch.empty_like(c, device=timesteps.device)
         #for i in range(c.size(0)):
         #    freqs[i] = torch.exp(c[i])
         #    print(f"{c[i] , freqs[i]}")
-        freqs = torch.exp(c)
+        freqs = torch.from_numpy(np.exp(c.numpy()))
         print(f"freq:{freqs}")
         args = timesteps[:, None].float() * freqs[None]
-        print("args")
         embedding = torch.cat([torch.cos(args), torch.sin(args)], dim=-1)
-        print("embedding")
         if dim % 2:
-            print("dim mod 2")
             embedding = torch.cat([embedding, torch.zeros_like(embedding[:, :1])], dim=-1)
     else:
-        print("else.. repeat")
         embedding = repeat(timesteps, 'b -> b d', d=dim)
     return embedding
 
