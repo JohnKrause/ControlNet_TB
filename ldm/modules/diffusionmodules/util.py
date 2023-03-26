@@ -167,7 +167,7 @@ def timestep_embedding(timesteps, dim, max_period=10000, repeat_only=False):
         a=-math.log(max_period)
         b=torch.arange(start=0, end=half, dtype=torch.float32)
         print(f"a:{a}")
-        print(f"b:{b}, {a.device}")
+        print(f"b:{b}, {b.device}")
         c=a*b/half
         print(f"c:{c}, {c.device}")
         c.to(device=timesteps.device)
