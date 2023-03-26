@@ -41,7 +41,7 @@ class TB_Dataset(Dataset):
         if (random.uniform(0.0, 1.0) > self.prompt_chance): 
             prompt = " " #delete the prompt
         elif (random.uniform(0.0, 1.0) > self.control_chance):
-            source = source * 0.0 #delete the control
+            source = np.zeros_like(source, dtype=np.uint8) #delete the control
 
         source = random_distortion(source)
 
