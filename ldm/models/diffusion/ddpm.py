@@ -887,7 +887,7 @@ class LatentDiffusion(DDPM):
                 cond = [cond]
             key = 'c_concat' if self.model.conditioning_key == 'concat' else 'c_crossattn'
             cond = {key: cond}
-
+        print("to self.model....")
         x_recon = self.model(x_noisy, t, **cond)
 
         if isinstance(x_recon, tuple) and not return_ids:
@@ -918,7 +918,7 @@ class LatentDiffusion(DDPM):
         noise = default(noise, lambda: torch.randn_like(x_start))
         print("to q sample")
         x_noisy = self.q_sample(x_start=x_start, t=t, noise=noise)
-        print("to apply sample")
+        print("to apply model")
         model_output = self.apply_model(x_noisy, t, cond)
 
         loss_dict = {}
@@ -1353,31 +1353,39 @@ class DiffusionWrapper(pl.LightningModule):
         assert self.conditioning_key in [None, 'concat', 'crossattn', 'hybrid', 'adm', 'hybrid-adm', 'crossattn-adm']
 
     def forward(self, x, t, c_concat: list = None, c_crossattn: list = None, c_adm=None):
+        print("into diffusion wrapper")
         if self.conditioning_key is None:
+            print("1")
             out = self.diffusion_model(x, t)
         elif self.conditioning_key == 'concat':
+            print("2")
             xc = torch.cat([x] + c_concat, dim=1)
             out = self.diffusion_model(xc, t)
         elif self.conditioning_key == 'crossattn':
+            print("3")
             if not self.sequential_cross_attn:
                 cc = torch.cat(c_crossattn, 1)
             else:
                 cc = c_crossattn
             out = self.diffusion_model(x, t, context=cc)
         elif self.conditioning_key == 'hybrid':
+            print("4")
             xc = torch.cat([x] + c_concat, dim=1)
             cc = torch.cat(c_crossattn, 1)
             out = self.diffusion_model(xc, t, context=cc)
         elif self.conditioning_key == 'hybrid-adm':
+            print("5")
             assert c_adm is not None
             xc = torch.cat([x] + c_concat, dim=1)
             cc = torch.cat(c_crossattn, 1)
             out = self.diffusion_model(xc, t, context=cc, y=c_adm)
         elif self.conditioning_key == 'crossattn-adm':
+            print("6")
             assert c_adm is not None
             cc = torch.cat(c_crossattn, 1)
             out = self.diffusion_model(x, t, context=cc, y=c_adm)
         elif self.conditioning_key == 'adm':
+            print("7")
             cc = c_crossattn[0]
             out = self.diffusion_model(x, t, y=cc)
         else:
