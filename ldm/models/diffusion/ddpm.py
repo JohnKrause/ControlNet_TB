@@ -851,7 +851,8 @@ class LatentDiffusion(DDPM):
         print(f"checking validity of c")
         for key,item in c.items():
             print(f"validity of {key}:")
-            self.check_tensor_validity(item)
+            for piece in item:
+                self.check_tensor_validity(piece)
         loss = self(x, c)
         print(f"got loss:{loss}")
         return loss
