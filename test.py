@@ -11,12 +11,12 @@ from config import *
 
 
 def test_sample(ddim_sampler):
-	with torch.no_grad():
-		prompt="a cat in a rowboat"
-		n_prompt="dog"
-		num_samples=1
-		ddim_steps=40
-		seed=-1
+    with torch.no_grad():
+        prompt="a cat in a rowboat"
+        n_prompt="dog"
+        num_samples=1
+        ddim_steps=40
+        seed=-1
         img = np.random.randint(0, 256, size=(768, 768, 3), dtype=np.uint8)
         H, W, C = img.shape
 
@@ -45,16 +45,16 @@ def test_sample(ddim_sampler):
     return [255 - detected_map] + results
 
 def test():
-	print("Creating model...")
-	model=create_model(GPUP_CONFIG_PATH).cpu()
-	#move the model to GPU
-	model = model.cuda()
-	#instantiate the sampler with the gpu-located model
-	sampler = DDIMSampler(model)
-	print("Test uninitialized model sample...")
-	test_sample(sampler)
-	print("loading model...")
-	m,u=model.load_state_dict(load_state_dict(MODEL_LOCAL, location=model.device), strict=False)
-	print("Test with initialized model...")
-	test_sample(sampler)
+    print("Creating model...")
+    model=create_model(GPUP_CONFIG_PATH).cpu()
+    #move the model to GPU
+    model = model.cuda()
+    #instantiate the sampler with the gpu-located model
+    sampler = DDIMSampler(model)
+    print("Test uninitialized model sample...")
+    test_sample(sampler)
+    print("loading model...")
+    m,u=model.load_state_dict(load_state_dict(MODEL_LOCAL, location=model.device), strict=False)
+    print("Test with initialized model...")
+    test_sample(sampler)
 
