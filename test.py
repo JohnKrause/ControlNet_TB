@@ -46,7 +46,7 @@ def test_sample(ddim_sampler):
 
 def test():
     print("Creating model...")
-    model=create_model(GPUP_CONFIG_PATH).cpu()
+    model=create_model(MODEL_CONFIG_LOCAL).cpu()
     #move the model to GPU
     model = model.cuda()
     #instantiate the sampler with the gpu-located model
