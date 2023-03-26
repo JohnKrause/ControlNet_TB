@@ -879,12 +879,16 @@ class LatentDiffusion(DDPM):
         return self.p_losses(x, c, t, *args, **kwargs)
 
     def apply_model(self, x_noisy, t, cond, return_ids=False):
+        print("in apply model")
         if isinstance(cond, dict):
+            print("a")
             # hybrid case, cond is expected to be a dict
             pass
         else:
+            print("b")
             if not isinstance(cond, list):
                 cond = [cond]
+            print("c")
             key = 'c_concat' if self.model.conditioning_key == 'concat' else 'c_crossattn'
             cond = {key: cond}
         print("to self.model....")
