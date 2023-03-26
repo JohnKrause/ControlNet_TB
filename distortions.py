@@ -37,7 +37,11 @@ def scale_vignette(image):
     diameter = random.randint(600, 768)
     radius = diameter // 2
     cv2.circle(mask, (center_x, center_y), radius, (255, 255, 255), -1)
-    return cv2.bitwise_and(image, cv2.cvtColor(mask, cv2.COLOR_GRAY2BGR))
+    try:
+        image = cv2.bitwise_and(image, cv2.cvtColor(mask, cv2.COLOR_GRAY2BGR))
+    except Exception as e:
+        raise Exception(f"{e}: \n Shape image:{image.shape}, Shape mask:{mask.shape}")
+    return image
 
 def scale_pixel_values(image):
     scale_factor = random.uniform(0.8, 1)

@@ -53,8 +53,6 @@ class TB_Dataset(Dataset):
 
         return dict(jpg=target, txt=prompt, hint=source)
 
-
-
 class TB_Sampler(Sampler):
     def __init__(self, dataset, subset_size):
         self.dataset = dataset
@@ -67,4 +65,10 @@ class TB_Sampler(Sampler):
 
     def __len__(self):
         return self.subset_size
+
+if __name__=='__main__':
+    print("testing TB_Dataset...")
+    tb=TB_Dataset('sketch',revision='r1')
+    for x in range(0,10000):
+        t=tb[x]
 
