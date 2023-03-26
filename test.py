@@ -18,9 +18,11 @@ def test_sample(model,ddim_sampler):
         ddim_steps=40
         seed=-1
         strength=1.0
+        scale=9.0
         img = np.random.randint(0, 256, size=(768, 768, 3), dtype=np.uint8)
         H, W, C = img.shape
         guess_mode=False
+        eta=0.0
 
         control = torch.from_numpy(img.copy()).float().cuda() / 255.0
         control = torch.stack([control for _ in range(num_samples)], dim=0)
