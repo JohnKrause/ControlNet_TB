@@ -20,7 +20,7 @@ def test_sample(ddim_sampler):
         img = np.random.randint(0, 256, size=(768, 768, 3), dtype=np.uint8)
         H, W, C = img.shape
 
-        control = torch.from_numpy(detected_map.copy()).float().cuda() / 255.0
+        control = torch.from_numpy(img.copy()).float().cuda() / 255.0
         control = torch.stack([control for _ in range(num_samples)], dim=0)
         control = einops.rearrange(control, 'b h w c -> b c h w').clone()
 
@@ -42,7 +42,7 @@ def test_sample(ddim_sampler):
         x_samples = (einops.rearrange(x_samples, 'b c h w -> b h w c') * 127.5 + 127.5).cpu().numpy().clip(0, 255).astype(np.uint8)
 
         results = [x_samples[i] for i in range(num_samples)]
-    return [255 - detected_map] + results
+    return [255 - img] + results
 
 def test():
     print("Creating model...")
