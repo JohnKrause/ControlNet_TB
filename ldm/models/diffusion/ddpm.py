@@ -863,14 +863,19 @@ class LatentDiffusion(DDPM):
         return is_valid
 
     def forward(self, x, c, *args, **kwargs):
+        print("begin forward...")
         t = torch.randint(0, self.num_timesteps, (x.shape[0],), device=self.device).long()
+        print("got t...")
         if self.model.conditioning_key is not None:
+            print("got conditioning")
             assert c is not None
             if self.cond_stage_trainable:
                 c = self.get_learned_conditioning(c)
             if self.shorten_cond_schedule:  # TODO: drop this option
                 tc = self.cond_ids[t].to(self.device)
                 c = self.q_sample(x_start=c, t=tc, noise=torch.randn_like(c.float()))
+            print("leave cond statement")
+        print("into p losses")
         return self.p_losses(x, c, t, *args, **kwargs)
 
     def apply_model(self, x_noisy, t, cond, return_ids=False):
@@ -909,6 +914,7 @@ class LatentDiffusion(DDPM):
         return mean_flat(kl_prior) / np.log(2.0)
 
     def p_losses(self, x_start, cond, t, noise=None):
+        print("enter p_losses")
         noise = default(noise, lambda: torch.randn_like(x_start))
         x_noisy = self.q_sample(x_start=x_start, t=t, noise=noise)
         model_output = self.apply_model(x_noisy, t, cond)
@@ -921,6 +927,7 @@ class LatentDiffusion(DDPM):
         elif self.parameterization == "eps":
             target = noise
         elif self.parameterization == "v":
+            print("v parameter")
             target = self.get_v(x_start, noise, t)
         else:
             raise NotImplementedError()
