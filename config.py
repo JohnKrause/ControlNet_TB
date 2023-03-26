@@ -14,8 +14,8 @@ MODEL="sd21_control_v1.ckpt"
 MODEL_LOCAL=f'training/{REVNUM}/models/{MODEL}'
 
 TRAINDB=f"train_db_{REVNUM}.json"
-TRAINDB_LOCAL=f'training/{REVNUM}/models/{TRAINDB.replace(f"_{REVNUM}","")}'
-
+TRAINDB_LOCAL=f'training/{REVNUM}/{TRAINDB.replace(f"_{REVNUM}","")}'
+ 
 LOG_CKPT_PATH=f"{REVNUM}/{CONTROL_TYPE}/"
 
-LOG_IMG_PATH=f"{LOG_CKPT_PATH}examples/"
+LOG_IMG_PATH=f"{REVNUM}/{CONTROL_TYPE}/examples/"

@@ -7,15 +7,16 @@ from torch.utils.data import Sampler
 from torch.utils.data import Dataset
 from distortions import random_distortion
 
+from config import *
+
 
 class TB_Dataset(Dataset):
     def __init__(self, control_type, revision="r1", prompt_chance=0.8, control_chance=0.8):
         self.control_chance = control_chance
         self.prompt_chance = prompt_chance
         self.control_type = control_type
-        self.revision_folder=f"./training/{revision}/"
         self.train_db = []
-        with open(self.revision_folder+'train_db.json', 'r') as f:
+        with open(TRAINDB_LOCAL, 'r') as f:
             self.train_db = json.load(f)
         print(f"-----------Loaded {len(self.train_db)} entries from training DB--------")
         print(f"-----------Targeting {self.control_type}----------")
@@ -26,12 +27,12 @@ class TB_Dataset(Dataset):
     def __getitem__(self, idx):
         item = self.train_db[idx]
 
-        source_filename = item['source'] #the control input
-        target_filename = item['target'] #the real image
+        source_filename = item['source'].split("/")[-1] #the control input
+        target_filename = item['target'].split("/")[-1] #the real image
         prompt = item['prompt']
 
-        source = cv2.imread(self.revision_folder + f"{self.control_type}/"+source_filename)
-        target = cv2.imread(self.revision_folder + target_filename)
+        source = cv2.imread(CONTROLS_EXTRACT + source_filename)
+        target = cv2.imread(IMAGES_EXTRACT + target_filename)
 
         # Do not forget that OpenCV read images in BGR order.
         source = cv2.cvtColor(source, cv2.COLOR_BGR2RGB)
