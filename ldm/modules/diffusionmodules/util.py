@@ -169,7 +169,7 @@ def timestep_embedding(timesteps, dim, max_period=10000, repeat_only=False):
         #for i in range(c.size(0)):
         #    freqs[i] = torch.exp(c[i])
         #    print(f"{c[i] , freqs[i]}")
-        freqs = torch.from_numpy(np.exp(c.numpy()))
+        freqs = np.exp(c)
         print(f"freq:{freqs}")
         args = timesteps[:, None].float() * freqs[None]
         embedding = torch.cat([torch.cos(args), torch.sin(args)], dim=-1)
