@@ -3,6 +3,7 @@ from share import *
 import pytorch_lightning as pl
 from torch.utils.data import DataLoader
 from torch import set_float32_matmul_precision
+from torch.autograd import set_detect_anomaly
 from tb_dataset import TB_Dataset, TB_Sampler
 from cldm.logger import ImageLogger
 from cldm.model import create_model, load_state_dict
@@ -26,6 +27,7 @@ sd_locked = True
 only_mid_control = False
 
 set_float32_matmul_precision('medium')
+
 # First use cpu to load models. Pytorch Lightning will automatically move it to GPUs.
 model = create_model(model_config).cpu()
 model.load_state_dict(load_state_dict(start_model, location='cpu'))

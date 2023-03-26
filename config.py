@@ -15,6 +15,8 @@ MODEL_LOCAL=f'training/{REVNUM}/models/{MODEL}'
 
 TRAINDB=f"train_db_{REVNUM}.json"
 TRAINDB_LOCAL=f'training/{REVNUM}/{TRAINDB.replace(f"_{REVNUM}","")}'
+
+MODEL_CONFIG_LOCAL=f"training/{REVNUM}/cldm_v21_v1.yaml"
  
 LOG_CKPT_PATH=f"{REVNUM}/{CONTROL_TYPE}/"
 
