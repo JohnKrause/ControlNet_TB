@@ -430,17 +430,24 @@ class DDPM(pl.LightningModule):
         return loss, loss_dict
 
     def training_step(self, batch, batch_idx):
+        print("begin training step")
         for k in self.ucg_training:
+            print(f" for k:{k}")
             p = self.ucg_training[k]["p"]
+            print(f"got p")
             val = self.ucg_training[k]["val"]
+            print(f"got val")
             if val is None:
+                print(f"val is none")
                 val = ""
             for i in range(len(batch[k])):
+                print(f"for i in batch, i= {i}")
                 if self.ucg_prng.choice(2, p=[1 - p, p]):
+                    print(f"if ucg_prng...")
                     batch[k][i] = val
-
+        print("self shared step")
         loss, loss_dict = self.shared_step(batch)
-        
+        print("log_dict")
         self.log_dict(loss_dict, prog_bar=True,
                       logger=True, on_step=True, on_epoch=True, batch_size=len(batch))
 
