@@ -285,13 +285,16 @@ class ControlNet(nn.Module):
     def forward(self, x, hint, timesteps, context, **kwargs):
         print("into controlnet forward...")
         t_emb = timestep_embedding(timesteps, self.model_channels, repeat_only=False)
+        print("got t_emb")
         emb = self.time_embed(t_emb)
+        print("got emb")
 
         guided_hint = self.input_hint_block(hint, emb, context)
-
+        print("got hint")
         outs = []
 
         h = x.type(self.dtype)
+        print("set type")
         for module, zero_conv in zip(self.input_blocks, self.zero_convs):
             print("run a module")
             if guided_hint is not None:
