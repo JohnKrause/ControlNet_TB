@@ -846,9 +846,18 @@ class LatentDiffusion(DDPM):
         print("ld shared step")
         x, c = self.get_input(batch, self.first_stage_key)
         print(f"ld got input: {x}, {c}")
+        print(f"checking validity of x")
+        self.check_tensor_validity(x)
+        print(f"checking validity of c")
+        self.check_tensor_validity(c)
         loss = self(x, c)
         print(f"got loss:{loss}")
         return loss
+
+    def check_tensor_validity(self, tensor):
+        is_valid = not (torch.isnan(tensor).any() or torch.isinf(tensor).any())
+        print(f'Tensor is valid: {is_valid}')
+        return is_valid
 
     def forward(self, x, c, *args, **kwargs):
         t = torch.randint(0, self.num_timesteps, (x.shape[0],), device=self.device).long()
