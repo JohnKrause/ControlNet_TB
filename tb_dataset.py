@@ -45,8 +45,8 @@ class TB_Dataset(Dataset):
 
         source = random_distortion(source)
 
-        # Normalize source images to [0, 1].
-        source = source.astype(np.float32) / 255.0
+        # Normalize source images to [-1, 1].
+        source = (source.astype(np.float32) / 127.5)-1.0
 
         # Normalize target images to [-1, 1].
         target = (target.astype(np.float32) / 127.5) - 1.0
