@@ -38,12 +38,16 @@ class TB_Dataset(Dataset):
         source = cv2.cvtColor(source, cv2.COLOR_BGR2RGB)
         target = cv2.cvtColor(target, cv2.COLOR_BGR2RGB)
 
+        #rescale source
+        source = source - (np.min(source))
+        source = source * (255/(np.max(source)))
+
         if (random.uniform(0.0, 1.0) > self.prompt_chance): 
             prompt = " " #delete the prompt
         elif (random.uniform(0.0, 1.0) > self.control_chance):
             source = np.zeros_like(source, dtype=np.uint8) #delete the control
 
-        source = random_distortion(source)
+        #source = random_distortion(source)
 
         # Normalize source images to [-1, 1].
         source = (source.astype(np.float32) / 127.5)-1.0
