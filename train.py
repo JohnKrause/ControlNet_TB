@@ -21,7 +21,7 @@ learning_rate = 10e-5
 prompt_chance = 1.0
 control_chance = 0.85
 epoch_size=10000
-max_epochs=100
+max_epochs=10
 control_type = CONTROL_TYPE
 sd_locked = True
 only_mid_control = False
@@ -44,7 +44,7 @@ dataset = TB_Dataset(control_type,
 sampler = TB_Sampler(dataset, epoch_size)
 dataloader = DataLoader(dataset, num_workers=3, batch_size=batch_size, sampler=sampler)
 logger = ImageLogger(batch_frequency=logger_freq)
-trainer = pl.Trainer(gpus=1, callbacks=[logger], accumulate_grad_batches=3, max_epochs=max_epochs)
+trainer = pl.Trainer(gpus=1, callbacks=[logger], accumulate_grad_batches=2, max_epochs=max_epochs)
 
 # Train!
 trainer.fit(model, dataloader)
