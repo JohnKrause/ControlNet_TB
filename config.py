@@ -10,7 +10,7 @@ IMAGES_TARGET=f"images_resize_{REVNUM}.tar.xz"
 IMAGES_TARGET_LOCAL=f'{IMAGES_TARGET}'
 IMAGES_EXTRACT=f'training/{REVNUM}/images_resize/'
 
-MODEL="sd21_control_v1.ckpt"
+MODEL="sketch_r1.ckpt"
 MODEL_LOCAL=f'training/{REVNUM}/models/{MODEL}'
 
 TRAINDB=f"train_db_{REVNUM}.json"
