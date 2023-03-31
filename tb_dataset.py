@@ -87,12 +87,14 @@ class TB_Dataset_distort(Dataset):
         source = source - (np.min(source))
         source = source * (255/(np.max(source)))
 
+        source = random_distortion(source)
+
         if (random.uniform(0.0, 1.0) > self.prompt_chance): 
             prompt = " " #delete the prompt
         elif (random.uniform(0.0, 1.0) > self.control_chance):
             source = np.zeros_like(source, dtype=np.uint8) #delete the control
 
-        source = random_distortion(source)
+
 
         # Normalize source images to [-1, 1].
         source = (source.astype(np.float32) / 127.5)-1.0
