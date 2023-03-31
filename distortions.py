@@ -39,7 +39,7 @@ def scale_vignette(image):
     cv2.circle(mask, (center_x, center_y), radius, (255, 255, 255), -1)
     mask_3_channel = np.stack([mask] * 3, axis=-1)
     try:
-        image = cv2.bitwise_and(image, cv2.cvtColor(mask_3_channel, cv2.COLOR_GRAY2BGR))
+        image = np.where(mask_3_channel==(255,255,255), image, (0,0,0))
     except Exception as e:
         raise Exception(f"{e}: \n Shape image:{image.shape}, Shape mask:{mask.shape}")
     return image
