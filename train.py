@@ -4,7 +4,7 @@ import pytorch_lightning as pl
 from torch.utils.data import DataLoader
 from torch import set_float32_matmul_precision
 from torch.autograd import set_detect_anomaly
-from tb_dataset import TB_Dataset, TB_Sampler
+from tb_dataset import TB_Dataset,TB_Dataset_distort, TB_Sampler
 from cldm.logger import ImageLogger
 from cldm.model import create_model, load_state_dict
 
@@ -37,14 +37,14 @@ model.only_mid_control = only_mid_control
 
 
 # Misc
-dataset = TB_Dataset(control_type,
+dataset = TB_Dataset_distort(control_type,
 					revision=revision,
 					prompt_chance=prompt_chance,
 					control_chance=control_chance)
 sampler = TB_Sampler(dataset, epoch_size)
 dataloader = DataLoader(dataset, num_workers=3, batch_size=batch_size, sampler=sampler)
 logger = ImageLogger(batch_frequency=logger_freq)
-trainer = pl.Trainer(gpus=1, callbacks=[logger], accumulate_grad_batches=2, max_epochs=max_epochs)
+trainer = pl.Trainer(gpus=1, callbacks=[logger], accumulate_grad_batches=10, max_epochs=max_epochs)
 
 # Train!
 trainer.fit(model, dataloader)

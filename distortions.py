@@ -51,7 +51,7 @@ def scale_pixel_values(image):
 
 def random_distortion(image):
     distortion_functions = [scale_distortion, scale_translation, scale_vignette, scale_pixel_values]
-    num_distortions = random.randint(0, 4)
+    num_distortions = random.randint(0, 2)
     selected_distortions = random.sample(distortion_functions, num_distortions)
 
     for distortion in selected_distortions:
