@@ -22,7 +22,7 @@ prompt_chance = 1.0
 control_chance = 0.85
 epoch_size=10000
 max_epochs=10
-control_type = CONTROL_TYPE
+control_type = 
 sd_locked = True
 only_mid_control = False
 
@@ -37,7 +37,7 @@ model.only_mid_control = only_mid_control
 
 
 # Misc
-dataset = TB_Dataset_distort(control_type,
+dataset = TB_Remote_Redis(control_type,
 					revision=revision,
 					prompt_chance=prompt_chance,
 					control_chance=control_chance)

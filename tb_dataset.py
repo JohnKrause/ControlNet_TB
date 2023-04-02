@@ -114,7 +114,7 @@ class TB_Remote_Redis(Dataset):
         self.len=10000
         with open("secrets.secret", "r") as file:
             self.secrets=json.load(file)
-        r = redis.Redis(
+        self.r = redis.Redis(
             host=self.secrets["redis"]["host"],
             port=self.secrets["redis"]["local_port"],
         )
@@ -124,7 +124,7 @@ class TB_Remote_Redis(Dataset):
 
     def __getitem__(self, idx):
 
-        _,item = r.blpop([self.control_type])
+        _,item = self.r.blpop([self.control_type])
 
         item = json.loads(item)
         image_bytes = base64.b64decode(item['image'])
