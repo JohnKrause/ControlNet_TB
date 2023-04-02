@@ -4,7 +4,7 @@ import pytorch_lightning as pl
 from torch.utils.data import DataLoader
 from torch import set_float32_matmul_precision
 from torch.autograd import set_detect_anomaly
-from tb_dataset import TB_Dataset,TB_Dataset_distort, TB_Sampler
+from tb_dataset import TB_Dataset, TB_Dataset_distort, TB_Remote_Redis, TB_Sampler
 from cldm.logger import ImageLogger
 from cldm.model import create_model, load_state_dict
 
@@ -12,17 +12,16 @@ from config import *
 
 
 # Configs
-revision = REVNUM
+revision = 'r1'
 model_config = f"./training/{revision}/cldm_v21_v1.yaml"
-start_model = f"./training/{revision}/models/{MODEL}"
+start_model = f"./training/{revision}/models/sketch_r1b.ckpt"
 batch_size = 3
 logger_freq = 1000
-learning_rate = 10e-5
+learning_rate = 1e-5
 prompt_chance = 1.0
 control_chance = 0.85
 epoch_size=10000
 max_epochs=10
-control_type = 
 sd_locked = True
 only_mid_control = False
 
@@ -37,14 +36,14 @@ model.only_mid_control = only_mid_control
 
 
 # Misc
-dataset = TB_Remote_Redis(control_type,
+dataset = TB_Remote_Redis('sketch_distort',
 					revision=revision,
 					prompt_chance=prompt_chance,
 					control_chance=control_chance)
 sampler = TB_Sampler(dataset, epoch_size)
 dataloader = DataLoader(dataset, num_workers=3, batch_size=batch_size, sampler=sampler)
 logger = ImageLogger(batch_frequency=logger_freq)
-trainer = pl.Trainer(gpus=1, callbacks=[logger], accumulate_grad_batches=10, max_epochs=max_epochs)
+trainer = pl.Trainer(gpus=1, callbacks=[logger], accumulate_grad_batches=2, max_epochs=max_epochs)
 
 # Train!
 trainer.fit(model, dataloader)
