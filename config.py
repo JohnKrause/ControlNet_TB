@@ -1,6 +1,6 @@
 save_memory = False
 CONTROL_TYPE='sketch'
-REVNUM="r1"
+REVNUM="r2"
 
 CONTROLS_TARGET=f"controls_{CONTROL_TYPE}_{REVNUM}.tar.xz"
 CONTROLS_TARGET_LOCAL=f'{CONTROLS_TARGET}'
