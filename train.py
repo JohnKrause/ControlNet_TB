@@ -14,14 +14,14 @@ from config import *
 # Configs
 revision = 'r1'
 model_config = f"./training/{revision}/cldm_v21_v1.yaml"
-start_model = f"./training/{revision}/models/sketch_r1b.ckpt"
-batch_size = 3
+start_model = f"./training/{revision}/models/sd21_control_v1.ckpt"
+batch_size = 6
 logger_freq = 1000
 learning_rate = 1e-5
 prompt_chance = 1.0
 control_chance = 0.85
-epoch_size=10000
-max_epochs=10
+epoch_size=40000
+max_epochs=20
 sd_locked = True
 only_mid_control = False
 
@@ -43,7 +43,7 @@ dataset = TB_Remote_Redis('sketch_distort',
 sampler = TB_Sampler(dataset, epoch_size)
 dataloader = DataLoader(dataset, num_workers=3, batch_size=batch_size, sampler=sampler)
 logger = ImageLogger(batch_frequency=logger_freq)
-trainer = pl.Trainer(gpus=1, callbacks=[logger], accumulate_grad_batches=2, max_epochs=max_epochs)
+trainer = pl.Trainer(gpus=1, callbacks=[logger], accumulate_grad_batches={0:100, 4:20, 11:5, 16:1}, max_epochs=max_epochs)
 
 # Train!
 trainer.fit(model, dataloader)
