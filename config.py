@@ -1,6 +1,6 @@
 save_memory = False
 
-CONTROL_TYPE='sketch'
+CONTROL_TYPE='color'
 REVNUM="r1"
 
 CONTROLS_TARGET=f"controls_{CONTROL_TYPE}_{REVNUM}.tar.xz"
