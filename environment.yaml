@@ -1,4 +1,4 @@
-name: control2
+name: controlnet_tb
 channels:
   - xformers
   - pytorch-nightly
