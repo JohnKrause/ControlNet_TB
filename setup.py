@@ -39,6 +39,7 @@ def download_from_s3():
         tar_extract(CONTROLS_TARGET_LOCAL,CONTROLS_EXTRACT)
         print(f"Extracted {CONTROLS_TARGET} successfully!")
 
+
 def download_bucket_file(s3_loc,local_loc,bucket):
     print(f"Downloading {s3_loc} to {local_loc}")
     dl_status =[0, bucket.Object(key=s3_loc).content_length]

@@ -31,6 +31,7 @@ class ImageLogger(Callback):
     @rank_zero_only
     def log_local(self, save_dir, split, images, global_step, current_epoch, batch_idx):
         with open('secrets.secret','r') as f:
+
             secrets = json.load(f)    
         # Connect to the S3 bucket using the authentication details
         s3 = boto3.resource('s3', aws_access_key_id=secrets['aws_access_key'], aws_secret_access_key=secrets['aws_secret_key'])

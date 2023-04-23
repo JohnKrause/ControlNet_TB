@@ -22,9 +22,7 @@ __pycache__/
 # secrets
 *.secret
 
-# Annotators
 annotate/*
-
 # Distribution / packaging
 .Python
 build/

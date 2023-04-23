@@ -40,6 +40,7 @@ def scale_vignette(image):
     mask_3_channel = np.stack([mask] * 3, axis=-1)
     try:
         image = np.where(mask_3_channel==(255,255,255), image, (0,0,0))
+
     except Exception as e:
         raise Exception(f"{e}: \n Shape image:{image.shape}, Shape mask:{mask.shape}")
     return image
@@ -53,6 +54,7 @@ def scale_pixel_values(image):
 def random_distortion(image):
     distortion_functions = [scale_distortion, scale_translation, scale_vignette, scale_pixel_values]
     num_distortions = random.randint(0, 2)
+
     selected_distortions = random.sample(distortion_functions, num_distortions)
 
     for distortion in selected_distortions:
