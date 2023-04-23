@@ -8,7 +8,7 @@ import time
 def open_ssh_tunnel():
     try:
         print("Opening remote SSH tunnel for remote redis...")
-        with open('secrets.secret') as f:
+        with open('secrets.secret','r') as f:
             secrets = json.load(f)
 
         # Build the SSH command to open the tunnel
