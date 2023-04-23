@@ -107,11 +107,11 @@ class TB_Dataset_distort(Dataset):
         return dict(jpg=target, txt=prompt, hint=source)
 
 class TB_Remote_Redis(Dataset):
-    def __init__(self, redis_list, revision="r1", prompt_chance=0.8, control_chance=0.8):
+    def __init__(self, redis_list, length, revision="r1", prompt_chance=0.8, control_chance=0.8):
         self.control_chance = control_chance
         self.prompt_chance = prompt_chance
         self.redis_list = redis_list
-        self.len=10000
+        self.len=length
         with open("secrets.secret", "r") as file:
             self.secrets=json.load(file)
 
