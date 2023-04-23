@@ -39,6 +39,7 @@ model.only_mid_control = only_mid_control
 
 # Misc
 dataset = TB_Remote_Redis(REDIS_LIST,
+					epoch_size,
 					revision=revision,
 					prompt_chance=prompt_chance,
 					control_chance=control_chance)
