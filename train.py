@@ -11,7 +11,7 @@ from cldm.model import create_model, load_state_dict
 
 from config import *
 
-def start_train:
+def start_train():
 	# Configs
 	revision = REVNUM
 	model_config = MODEL_CONFIG_LOCAL
