@@ -44,9 +44,9 @@ def start_train():
 						prompt_chance=prompt_chance,
 						control_chance=control_chance)
 	sampler = TB_Sampler(dataset, epoch_size)
-	dataloader = DataLoader(dataset, num_workers=3, batch_size=batch_size, sampler=sampler)
+	dataloader = DataLoader(dataset, num_workers=4, batch_size=batch_size, sampler=sampler, pin_memory=True)
 	logger = ImageLogger(batch_frequency=logger_freq)
-	trainer = pl.Trainer(gpus=2, callbacks=[logger], accumulate_grad_batches={0:100, 4:20, 11:5, 16:1}, max_epochs=max_epochs)
+	trainer = pl.Trainer(accelerator='gpu', devices=2, strategy="ddp", persistent_workers=True, callbacks=[logger], accumulate_grad_batches={0:100, 4:20, 11:5, 16:1}, max_epochs=max_epochs)
 
 	# Train!
 	trainer.fit(model, dataloader)
