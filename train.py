@@ -16,13 +16,13 @@ def start_train():
 	revision = REVNUM
 	model_config = MODEL_CONFIG_LOCAL
 	start_model = MODEL_LOCAL
-	batch_size = 6
+	batch_size = 3
 	logger_freq = 3000
-	learning_rate = 1e-5
+	learning_rate = 30e-5
 	prompt_chance = 1.0
-	control_chance = 0.85
-	epoch_size=40000
-	max_epochs=20
+	control_chance = 0.95
+	epoch_size=25000
+	max_epochs=40
 	sd_locked = True
 	only_mid_control = False
 

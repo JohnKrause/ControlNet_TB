@@ -1,7 +1,7 @@
 save_memory = False
 
-CONTROL_TYPE='color'
-REDIS_LIST='color'
+CONTROL_TYPE='edges'
+REDIS_LIST='sketch'
 REVNUM="r1"
 
 CONTROLS_TARGET=f"controls_{CONTROL_TYPE}_{REVNUM}.tar.xz"
