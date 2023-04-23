@@ -1,5 +1,7 @@
 save_memory = False
-CONTROL_TYPE='sketch'
+CONTROL_TYPE='edges'
+REDIS_LIST='sketch'
+
 REVNUM="r1"
 
 CONTROLS_TARGET=f"controls_{CONTROL_TYPE}_{REVNUM}.tar.xz"
@@ -13,6 +15,9 @@ IMAGES_EXTRACT=f'training/{REVNUM}/images_resize/'
 MODEL="sd21_control_v1.ckpt"
 MODEL_LOCAL=f'training/{REVNUM}/models/{MODEL}'
 
+MODEL_CHECKPOINT_LOCAL=f'training/{REVNUM}/models/checkpoints/'
+
+
 TRAINDB=f"train_db_{REVNUM}.json"
 TRAINDB_LOCAL=f'training/{REVNUM}/{TRAINDB.replace(f"_{REVNUM}","")}'
 
@@ -21,3 +26,6 @@ MODEL_CONFIG_LOCAL=f"training/{REVNUM}/cldm_v21_v1.yaml"
 LOG_CKPT_PATH=f"{REVNUM}/{CONTROL_TYPE}/"
 
 LOG_IMG_PATH=f"{REVNUM}/{CONTROL_TYPE}/examples/"
+
+LR_GAMMA=0.9
+

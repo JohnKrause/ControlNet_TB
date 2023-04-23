@@ -37,8 +37,10 @@ def scale_vignette(image):
     diameter = random.randint(600, 768)
     radius = diameter // 2
     cv2.circle(mask, (center_x, center_y), radius, (255, 255, 255), -1)
+    mask_3_channel = np.stack([mask] * 3, axis=-1)
     try:
-        image = cv2.bitwise_and(image, cv2.cvtColor(mask, cv2.COLOR_GRAY2BGR))
+        image = np.where(mask_3_channel==(255,255,255), image, (0,0,0))
+
     except Exception as e:
         raise Exception(f"{e}: \n Shape image:{image.shape}, Shape mask:{mask.shape}")
     return image
@@ -51,7 +53,8 @@ def scale_pixel_values(image):
 
 def random_distortion(image):
     distortion_functions = [scale_distortion, scale_translation, scale_vignette, scale_pixel_values]
-    num_distortions = random.randint(0, 4)
+    num_distortions = random.randint(0, 2)
+
     selected_distortions = random.sample(distortion_functions, num_distortions)
 
     for distortion in selected_distortions:

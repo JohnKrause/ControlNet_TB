@@ -21,23 +21,24 @@ def download_from_s3():
     os.makedirs(os.path.dirname(f'training/{REVNUM}/models/'), exist_ok=True)
     os.makedirs(os.path.dirname(f'training/{REVNUM}/{CONTROL_TYPE}/images_resize/'), exist_ok=True)
     os.makedirs(os.path.dirname(f'training/{REVNUM}/{CONTROL_TYPE}/controls/'), exist_ok=True)
+    os.makedirs(os.path.dirname(MODEL_CHECKPOINT_LOCAL), exist_ok=True)
 
     #Download the training data...
-    download_bucket_file(TRAINDB, TRAINDB_LOCAL, bucket)
-    download_bucket_file(MODEL, MODEL_LOCAL, bucket)
-    download_bucket_file(IMAGES_TARGET, IMAGES_TARGET_LOCAL, bucket)
-    download_bucket_file(CONTROLS_TARGET, CONTROLS_TARGET_LOCAL, bucket)
+    if input("download traindb? y/n").lower()=="y":
+        download_bucket_file(TRAINDB, TRAINDB_LOCAL, bucket)
+    if input("download base model? y/n").lower()=="y":
+        download_bucket_file(MODEL, MODEL_LOCAL, bucket)
+    if input("download training images? y/n").lower()=="y":
+        download_bucket_file(IMAGES_TARGET, IMAGES_TARGET_LOCAL, bucket)
+        download_bucket_file(CONTROLS_TARGET, CONTROLS_TARGET_LOCAL, bucket)
+        #extract things using multiprocessing
+        print(f"Extracting {IMAGES_TARGET}...")
+        tar_extract(IMAGES_TARGET_LOCAL,IMAGES_EXTRACT)
+        print(f"Extracted {IMAGES_TARGET} successfully!")
+        print(f"Extracting {CONTROLS_TARGET}...")
+        tar_extract(CONTROLS_TARGET_LOCAL,CONTROLS_EXTRACT)
+        print(f"Extracted {CONTROLS_TARGET} successfully!")
 
-    #download manifest of images...
-
-    #extract things using multiprocessing
-    print(f"Extracting {IMAGES_TARGET}...")
-    tar_extract(IMAGES_TARGET_LOCAL,IMAGES_EXTRACT)
-    print(f"Extracted {IMAGES_TARGET} successfully!")
-    
-    print(f"Extracting {CONTROLS_TARGET}...")
-    tar_extract(CONTROLS_TARGET_LOCAL,CONTROLS_EXTRACT)
-    print(f"Extracted {CONTROLS_TARGET} successfully!")
 
 def download_bucket_file(s3_loc,local_loc,bucket):
     print(f"Downloading {s3_loc} to {local_loc}")

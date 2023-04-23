@@ -1,3 +1,4 @@
+from config import *
 import einops
 import torch
 import torch as th
@@ -357,7 +358,7 @@ class ControlLDM(LatentDiffusion):
         N = min(z.shape[0], N)
         n_row = min(z.shape[0], n_row)
         log["reconstruction"] = self.decode_first_stage(z)
-        log["control"] = c_cat * 2.0 - 1.0
+        log["control"] = c_cat
         log["conditioning"] = log_txt_as_img((512, 512), batch[self.cond_stage_key], size=16)
 
         if plot_diffusion_rows:
@@ -419,7 +420,7 @@ class ControlLDM(LatentDiffusion):
             params += list(self.model.diffusion_model.output_blocks.parameters())
             params += list(self.model.diffusion_model.out.parameters())
         opt = torch.optim.AdamW(params, lr=lr)
-        sched=torch.optim.lr_scheduler.StepLR(opt,1,gamma=0.5)
+        sched=torch.optim.lr_scheduler.StepLR(opt,1,gamma=LR_GAMMA)
         return  {'optimizer': opt, 'lr_scheduler': sched}
 
     def low_vram_shift(self, is_diffusing):
