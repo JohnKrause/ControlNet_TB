@@ -12,11 +12,11 @@ from config import *
 
 
 # Configs
-revision = 'r1'
-model_config = f"./training/{revision}/cldm_v21_v1.yaml"
-start_model = f"./training/{revision}/models/sd21_control_v1.ckpt"
+revision = REVNUM
+model_config = MODEL_CONFIG_LOCAL
+start_model = MODEL_LOCAL
 batch_size = 6
-logger_freq = 1000
+logger_freq = 3000
 learning_rate = 1e-5
 prompt_chance = 1.0
 control_chance = 0.85
@@ -36,7 +36,7 @@ model.only_mid_control = only_mid_control
 
 
 # Misc
-dataset = TB_Remote_Redis('sketch_distort',
+dataset = TB_Remote_Redis(REDIS_LIST,
 					revision=revision,
 					prompt_chance=prompt_chance,
 					control_chance=control_chance)

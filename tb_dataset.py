@@ -107,10 +107,10 @@ class TB_Dataset_distort(Dataset):
         return dict(jpg=target, txt=prompt, hint=source)
 
 class TB_Remote_Redis(Dataset):
-    def __init__(self, control_type, revision="r1", prompt_chance=0.8, control_chance=0.8):
+    def __init__(self, redis_list, revision="r1", prompt_chance=0.8, control_chance=0.8):
         self.control_chance = control_chance
         self.prompt_chance = prompt_chance
-        self.control_type = control_type
+        self.redis_list = redis_list
         self.len=10000
         with open("secrets.secret", "r") as file:
             self.secrets=json.load(file)
@@ -124,7 +124,7 @@ class TB_Remote_Redis(Dataset):
 
     def __getitem__(self, idx):
 
-        _,item = self.r.blpop([self.control_type])
+        _,item = self.r.blpop([self.redis_list])
 
         item = json.loads(item)
         image_bytes = base64.b64decode(item['image'])

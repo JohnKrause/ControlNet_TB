@@ -21,6 +21,7 @@ def download_from_s3():
     os.makedirs(os.path.dirname(f'training/{REVNUM}/models/'), exist_ok=True)
     os.makedirs(os.path.dirname(f'training/{REVNUM}/{CONTROL_TYPE}/images_resize/'), exist_ok=True)
     os.makedirs(os.path.dirname(f'training/{REVNUM}/{CONTROL_TYPE}/controls/'), exist_ok=True)
+    os.makedirs(os.path.dirname(MODEL_CHECKPOINT_LOCAL), exist_ok=True)
 
     #Download the training data...
     if input("download traindb? y/n").lower()=="y":

@@ -1,3 +1,4 @@
+from config import *
 import einops
 import torch
 import torch as th
@@ -419,7 +420,7 @@ class ControlLDM(LatentDiffusion):
             params += list(self.model.diffusion_model.output_blocks.parameters())
             params += list(self.model.diffusion_model.out.parameters())
         opt = torch.optim.AdamW(params, lr=lr)
-        sched=torch.optim.lr_scheduler.StepLR(opt,1,gamma=0.9)
+        sched=torch.optim.lr_scheduler.StepLR(opt,1,gamma=LR_GAMMA)
         return  {'optimizer': opt, 'lr_scheduler': sched}
 
     def low_vram_shift(self, is_diffusing):
